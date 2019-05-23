@@ -1,0 +1,5 @@
+inbound_listener:
+  address: 127.0.0.1:9000
+
+mongodb:
+  - mongodb://localhost:27017
