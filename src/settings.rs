@@ -16,15 +16,8 @@ pub struct Listener {
   pub backlog: Option<i16>,
   pub workers: Option<i16>,
 
-  #[serde(default)]
-  pub tls: TLSConfig
-}
-
-#[derive(Debug, Default, Deserialize)]
-pub struct TLSConfig {
-  pub enabled: bool,
-  pub private_key: String,
-  pub cert: String
+  pub private_key: Option<String>,
+  pub cert: Option<String>
 }
 
 impl Settings {

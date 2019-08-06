@@ -1,3 +1,5 @@
+#![feature(async_await)]
+
 #[macro_use]
 extern crate clap;
 
@@ -12,7 +14,6 @@ extern crate mongodb;
 extern crate juniper;
 
 use clap::{App, Arg};
-use std::sync::RwLock;
 use std::ops::Deref;
 
 mod logging;
