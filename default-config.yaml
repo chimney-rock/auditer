@@ -1,5 +1,10 @@
 inbound_listener:
   address: 127.0.0.1:9000
 
-mongodb:
-  - mongodb://localhost:27017
+database:
+  adapter: MongoDB
+  host: localhost
+  name: auditing_dev
+  port: 27017
+  username: auditer
+  password: fabulous_rainbows

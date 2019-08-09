@@ -9,6 +9,7 @@ extern crate log;
 #[macro_use]
 extern crate lazy_static;
 
+#[macro_use]
 extern crate mongodb;
 
 extern crate juniper;
@@ -16,6 +17,7 @@ extern crate juniper;
 use clap::{App, Arg};
 use std::ops::Deref;
 
+mod db;
 mod logging;
 mod settings;
 use settings::Settings;
@@ -59,41 +61,37 @@ lazy_static! {
   static ref APP_SETTINGS: Settings = Settings::new();
 }
 
-pub trait Join {
-  /// # Example
-  /// ```
-  /// use array_tool::vec::Join;
-  ///
-  /// vec![1,2,3].join(",");
-  /// ```
-  ///
-  /// # Output
-  /// ```text
-  /// "1,2,3"
-  /// ```
-  fn join(&self, joiner: &'static str) -> String;
-}
-
-impl<T: ToString> Join for Vec<T> {
-  fn join(&self, joiner: &'static str) -> String {
-    let mut out = String::from("");
-    for x in 0..self.len() {
-      out.push_str(&self[x].to_string());
-      if x < self.len()-1 {
-        out.push_str(&joiner)
-      }
-    }
-    out
+fn main() {
+  if let Err(ref _err) = run() {
+    std::process::exit(1);
   }
 }
 
-fn main() -> std::io::Result<()> {
+use mongodb::doc;
+use wither::prelude::*;
+
+fn run() -> Result<(), failure::Error> {
   // Ensure all statics are valid
   let (_, _) = (APP_ARGS.deref(), APP_SETTINGS.deref());
 
   logging::init().expect("Failed to initialize logging.");
   
-  debug!("Loaded configuration => {:#?}", *APP_SETTINGS);
+  // debug!("Loaded configuration => {:#?}", *APP_SETTINGS);
 
+  let database = db::Database::new()?;
+  database.sync_all()?;
+
+  let pool = database.pool.get()?;
+
+  let ghetto_fabulous = doc! {
+    "username": "nater540",
+    "roles": ["admin", "unicorn"],
+    "favorite_colors": ["yellow"]
+  };
+
+  let mut object_version = db::Version::new(None, ghetto_fabulous);
+  object_version.save(pool.clone(), None)?;
+
+  debug!("Work Complete!");
   Ok(())
 }

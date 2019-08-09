@@ -7,7 +7,7 @@ use crate::APP_ARGS;
 #[derive(Debug, Deserialize)]
 pub struct Settings {
   pub inbound_listener: Listener,
-  pub mongodb: Vec<String>
+  pub database: Database
 }
 
 #[derive(Debug, Deserialize)]
@@ -18,6 +18,22 @@ pub struct Listener {
 
   pub private_key: Option<String>,
   pub cert: Option<String>
+}
+
+#[derive(Debug, Deserialize)]
+pub enum DatabaseAdapter {
+  MongoDB
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Database {
+  pub adapter: DatabaseAdapter,
+  pub name: String,
+  pub host: String,
+  pub port: Option<u16>,
+  pub username: String,
+  pub password: String,
+  pub pool: Option<usize>
 }
 
 impl Settings {

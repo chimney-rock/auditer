@@ -3,7 +3,7 @@ use actix_web::{/*http::header, */middleware::Logger, App, HttpServer, web};
 // use actix_cors::Cors;
 
 use crate::APP_SETTINGS;
-// use crate::db::Database;
+use crate::db::Database;
 
 // use crate::app::graphql::create_schema;
 
@@ -17,14 +17,14 @@ impl Server {
     let sys = actix_rt::System::new("auditer");
 
     // Initialize a pool of database connections
-    // let db = Database::new()?;
+    let db = Database::new()?;
 
     // Create the GraphQL schema
     // let schema = std::sync::Arc::new(create_schema());
 
     let server = HttpServer::new(move || {
       App::new()
-        // .data(db.clone())
+        .data(db.clone())
         // .data(schema.clone())
         .wrap(Logger::default())
         // .wrap(

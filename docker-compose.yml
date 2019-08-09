@@ -2,23 +2,17 @@ version: '3.7'
 
 volumes:
   mongo:
-  nfsmount:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
-      device: ":${PWD}/"
 
 services:
-  api:
-    image: auditing
-    build: .
-    ports:
-      - 9000:9000
-    volumes:
-      - nfsmount:/app/current
-    depends_on:
-      - mongo
+  # api:
+  #   image: auditing
+  #   build: .
+  #   ports:
+  #     - 9000:9000
+  #   volumes:
+  #     - .:/app/current
+  #   depends_on:
+  #     - mongo
 
   mongo:
     image: mongo:4.1.11-bionic
@@ -27,6 +21,6 @@ services:
     volumes:
       - mongo:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: kitty!
+      MONGO_INITDB_ROOT_USERNAME: auditer
+      MONGO_INITDB_ROOT_PASSWORD: fabulous_rainbows
       MONGO_INITDB_DATABASE: auditing_dev
