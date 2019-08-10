@@ -1,4 +1,5 @@
 #![feature(async_await)]
+#![allow(dead_code)]
 
 #[macro_use]
 extern crate clap;
@@ -9,15 +10,14 @@ extern crate log;
 #[macro_use]
 extern crate lazy_static;
 
-#[macro_use]
+// #[macro_use]
 extern crate mongodb;
-
-extern crate juniper;
 
 use clap::{App, Arg};
 use std::ops::Deref;
 
 mod db;
+mod grpc;
 mod logging;
 mod settings;
 use settings::Settings;
@@ -67,31 +67,12 @@ fn main() {
   }
 }
 
-use mongodb::doc;
-use wither::prelude::*;
-
 fn run() -> Result<(), failure::Error> {
   // Ensure all statics are valid
   let (_, _) = (APP_ARGS.deref(), APP_SETTINGS.deref());
 
   logging::init().expect("Failed to initialize logging.");
   
-  // debug!("Loaded configuration => {:#?}", *APP_SETTINGS);
-
-  let database = db::Database::new()?;
-  database.sync_all()?;
-
-  let pool = database.pool.get()?;
-
-  let ghetto_fabulous = doc! {
-    "username": "nater540",
-    "roles": ["admin", "unicorn"],
-    "favorite_colors": ["yellow"]
-  };
-
-  let mut object_version = db::Version::new(None, ghetto_fabulous);
-  object_version.save(pool.clone(), None)?;
-
-  debug!("Work Complete!");
+  grpc::start_server()?;
   Ok(())
 }

@@ -5,27 +5,15 @@ version     = "0.1.0"
 readme      = "README.md"
 authors     = ["Nate Strandberg <nater540@gmail.com>"]
 edition     = "2018"
+build       = "build.rs"
 
 [[bin]]
 name = "auditer"
 path = "src/main.rs"
 doc  = false
 
-[profile.dev]
-opt-level = 0
-debug = true
-debug-assertions = true
-
-[profile.release]
-opt-level = "s"
-lto = true
-debug = false
-debug-assertions = false
-
 [dependencies]
 mongodb = "0.3.12"
-actix-rt = "0.2.4"
-actix-web = { version = "1.0.5", features = ["ssl", "brotli", "flate2-zlib"] }
 clap = "2.33.0"
 config = "0.9.3"
 chrono = { version = "0.4.7", features = ["serde"] }
@@ -48,13 +36,38 @@ r2d2-mongodb = "0.2.2"
 wither = "0.8.0"
 wither_derive = "0.8.0"
 
+# GRPC
+bytes = "0.4"
+prost = "0.5"
+tokio = "0.1"
+hyper = "0.12"
+tower-util = "0.1"
+tower-hyper = "0.1"
+tower-service = "0.2"
+tower-grpc =  { git = "https://github.com/tower-rs/tower-grpc" }
+tower-request-modifier = { git = "https://github.com/tower-rs/tower-http" }
+
 # Logging
 log = "0.4.8"
 fern = "0.5.8"
 
 openssl-sys = "*"
 
+[build-dependencies]
+tower-grpc-build = { git = "https://github.com/tower-rs/tower-grpc",  features = ["tower-hyper"] }
+
 [features]
-# Force openssl-sys to staticly link in the openssl library. Necessary when
-# cross compiling to x86_64-unknown-linux-musl.
+# Force openssl-sys to staticly link in the openssl library.
+# Necessary when cross compiling to x86_64-unknown-linux-musl.
 vendored = ["openssl-sys/vendored"]
+
+[profile.dev]
+opt-level = 0
+debug = true
+debug-assertions = true
+
+[profile.release]
+opt-level = "s"
+lto = true
+debug = false
+debug-assertions = false
