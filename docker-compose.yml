@@ -4,23 +4,23 @@ volumes:
   mongo:
 
 services:
-  # api:
-  #   image: auditing
-  #   build: .
-  #   ports:
-  #     - 9000:9000
-  #   volumes:
-  #     - .:/app/current
-  #   depends_on:
-  #     - mongo
-
-  mongo:
-    image: mongo:4.1.11-bionic
+  auditer:
+    image: auditer
+    build: .
     ports:
-      - 27017:27017
+      - 9000:9000
     volumes:
-      - mongo:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: auditer
-      MONGO_INITDB_ROOT_PASSWORD: fabulous_rainbows
-      MONGO_INITDB_DATABASE: auditing_dev
+      - .:/app/current
+    # depends_on:
+    #   - mongo
+
+  # mongo:
+  #   image: mongo:4.1.11-bionic
+  #   ports:
+  #     - 27017:27017
+  #   volumes:
+  #     - mongo:/data/db
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: auditer
+  #     MONGO_INITDB_ROOT_PASSWORD: fabulous_rainbows
+  #     MONGO_INITDB_DATABASE: auditer_dev
