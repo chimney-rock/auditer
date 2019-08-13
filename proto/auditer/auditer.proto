@@ -6,18 +6,36 @@ option java_outer_classname = "AuditingService";
 
 package Auditing;
 
-// The greeting service definition.
 service Auditer {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  // Sent when a new object was created by another service
+  rpc ObjectCreate(ObjectCreateRequest) returns(Empty) {}
+
+  rpc ObjectUpdate(ObjectUpdateRequest) returns(Empty) {}
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+// Message used when creating new records
+message ObjectCreateRequest {
+  // Object ID (Should be a UUID)
+  string id = 1;
+
+  // Object data (JSON formatted)
+  string object = 2;
+  
+  // Service name (URI)
+  string service_name = 20;
 }
 
-// The response message containing the greetings
-message HelloReply {
-  string message = 1;
+message ObjectUpdateRequest {
+  // Object ID (Should be a UUID)
+  string id = 1;
+
+  // Object data (JSON formatted)
+  string object = 2;
+  
+  // Service name (URI)
+  string service_name = 20;
+}
+
+message Empty {
+  string temp = 1;
 }

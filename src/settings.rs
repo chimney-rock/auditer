@@ -6,7 +6,8 @@ use crate::APP_ARGS;
 
 #[derive(Debug, Deserialize)]
 pub struct Settings {
-  pub inbound_listener: Listener,
+  pub grpc_listener: Listener,
+  pub amqp: Amqp,
   pub database: Database
 }
 
@@ -16,6 +17,14 @@ pub struct Listener {
   pub backlog: Option<i16>,
   pub workers: Option<i16>,
 
+  pub private_key: Option<String>,
+  pub cert: Option<String>
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Amqp {
+  pub address: SocketAddr,
+  pub queue: String,
   pub private_key: Option<String>,
   pub cert: Option<String>
 }

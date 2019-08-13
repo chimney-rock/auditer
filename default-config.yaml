@@ -1,5 +1,9 @@
-inbound_listener:
+grpc_listener:
   address: 127.0.0.1:9000
+
+amqp:
+  address: 127.0.0.1:5672
+  queue: auditing_dev
 
 database:
   adapter: MongoDB

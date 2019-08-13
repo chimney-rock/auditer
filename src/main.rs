@@ -73,6 +73,12 @@ fn run() -> Result<(), failure::Error> {
 
   logging::init().expect("Failed to initialize logging.");
   
-  grpc::start_server()?;
+  let grpc_server = grpc::build();
+  // tokio::run(grpc_server);
+  tokio::run(futures::lazy(|| {
+    tokio::spawn(grpc_server);
+    Ok(())
+  }));
+
   Ok(())
 }
